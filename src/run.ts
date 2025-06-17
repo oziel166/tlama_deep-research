@@ -56,10 +56,10 @@ async function run() {
       10,
     ) || 6;
   const outputType = await askQuestion(
-    'Output format - report (long), answer (concise), or pdf (report as PDF)? (report/answer/pdf, default pdf): ',
+    'Output format - report (long) or answer (concise)? (report/answer, default report): ',
   );
   const isReport = outputType !== 'answer';
-  const isPDF = outputType === 'pdf' || outputType === '';
+  const isPDF = false; // PDF generation disabled to avoid Chrome/Chromium dependency issues
 
   let combinedQuery = initialQuery;
   if (isReport) {
@@ -111,18 +111,8 @@ ${followUpQuestions.map((q: string, i: number) => `Q: ${q}\nA: ${answers[i]}`).j
     await fs.writeFile('report.md', report, 'utf-8');
     log(`\n\nFinal Report:\n\n${report}`);
 
-    if (isPDF) {
-      log('\nGenerating PDF...');
-      const reportTitle = await generateReportTitle({
-        prompt: combinedQuery,
-        learnings,
-      });
-
-      await generatePDF(report, 'report.pdf', { title: reportTitle });
-      log('\nReport has been saved to report.pdf');
-    } else {
-      log('\nReport has been saved to report.md');
-    }
+    // PDF generation disabled - always save as markdown
+    log('\nReport has been saved to report.md');
   } else {
     const answer = await writeFinalAnswer({
       prompt: combinedQuery,

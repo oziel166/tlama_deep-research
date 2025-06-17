@@ -251,17 +251,18 @@ ${job.followUpQuestions
       job.report = report;
       job.reportUrl = reportUrl;
 
-      if (job.outputFormat === 'pdf') {
-        const reportTitle = await generateReportTitle({
-          prompt: combinedQuery,
-          learnings,
-        });
+      // PDF generation disabled to avoid Chrome/Chromium dependency issues
+      // if (job.outputFormat === 'pdf') {
+      //   const reportTitle = await generateReportTitle({
+      //     prompt: combinedQuery,
+      //     learnings,
+      //   });
 
-        const pdfPath = `/tmp/report-${id}.pdf`;
-        await generatePDF(report, pdfPath, { title: reportTitle });
-        job.reportPdf = await fs.readFile(pdfPath);
-        await fs.unlink(pdfPath).catch(() => {});
-      }
+      //   const pdfPath = `/tmp/report-${id}.pdf`;
+      //   await generatePDF(report, pdfPath, { title: reportTitle });
+      //   job.reportPdf = await fs.readFile(pdfPath);
+      //   await fs.unlink(pdfPath).catch(() => {});
+      // }
 
       clearTimeout(jobTimeout);
       job.status = 'completed';
